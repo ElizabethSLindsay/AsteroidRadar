@@ -7,6 +7,8 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.squareup.picasso.Callback
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.BaseApplication
 import com.udacity.asteroidradar.PictureOfDay
@@ -40,9 +42,19 @@ class MainFragment : Fragment() {
 
         Picasso.with(activity_main_image_of_the_day.context)
             .load("https://api.nasa.gov/planetary/apod?api_key=SNrG4C86m2Zxhx9b7HAAnOGdJQqB6BzYRLlTi0fp")
-            .placeholder(R.drawable.placeholder_picture_of_day)
-            .error(R.drawable.ic_connection_error)
-            .into(activity_main_image_of_the_day)
+            .networkPolicy(NetworkPolicy.OFFLINE)
+            .into(activity_main_image_of_the_day, object : Callback {
+                override fun onSuccess() {
+                    // No op
+                }
+                override fun onError() {
+                    Picasso.with(activity_main_image_of_the_day.context)
+                        .load("https://api.nasa.gov/planetary/apod?api_key=SNrG4C86m2Zxhx9b7HAAnOGdJQqB6BzYRLlTi0fp")
+                        .placeholder(R.drawable.placeholder_picture_of_day)
+                        .error(R.drawable.ic_connection_error)
+                        .into(activity_main_image_of_the_day)
+                }
+            })
 
 
 
@@ -55,8 +67,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = AsteroidAdapter {  asteroidEntities ->
-            val action = MainFragmentDirections
-                .actionMainFragmentToDetailFragment()
+            val action = MainFragmentDirections.actionMainFragmentToDetailFragment()
                 findNavController().navigate(action)
 
         }

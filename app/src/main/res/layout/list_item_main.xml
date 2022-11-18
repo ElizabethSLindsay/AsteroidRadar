@@ -48,7 +48,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:layout_marginEnd="8dp"
-            android:text="@{asteroidListItem.potentiallyHazardous}"
+            android:text="@{asteroidListItem.isPotentiallyHazardous}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_status_normal"/>
